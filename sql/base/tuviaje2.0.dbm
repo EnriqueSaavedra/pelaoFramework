@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<database name="new_database">
+</database>
+
+<table name="ruta">
+	<schema name="public"/>
+	<position x="175" y="57"/>
+	<column name="id">
+		<type name="serial"/>
+	</column>
+	<column name="cod" not-null="true">
+		<type name="character varying" length="10"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<constraint name="pk_rutas" type="pk-constr" factor="10" table="public.ruta">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="ruta_ciudad">
+	<schema name="public"/>
+	<position x="492" y="31"/>
+	<column name="id_ruta" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="id_ciudad" not-null="true">
+		<type name="int2"/>
+	</column>
+	<constraint name="pk_ruta_ciudad" type="pk-constr" factor="10" table="public.ruta_ciudad">
+		<columns names="id_ruta,id_ciudad" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="ciudad">
+	<schema name="public"/>
+	<position x="837" y="47"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="cod" not-null="true">
+		<type name="character varying" length="10"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<constraint name="pk_ciudad" type="pk-constr" factor="10" table="public.ciudad">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="usuario">
+	<schema name="public"/>
+	<position x="856" y="205"/>
+	<column name="id">
+		<type name="serial"/>
+	</column>
+	<column name="nombre" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="pass" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="token">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="activo" not-null="true" default-value="t">
+		<type name="boolean"/>
+	</column>
+	<column name="fecha_creacion" not-null="true" default-value="now()">
+		<type name="timestamp" with-timezone="true"/>
+	</column>
+	<constraint name="pk_usuario" type="pk-constr" factor="10" table="public.usuario">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="vehiculo">
+	<schema name="public"/>
+	<position x="815" y="432"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="id_usuario" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="patente" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="descripcion">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="adicionales">
+		<type name="json"/>
+	</column>
+	<constraint name="pk_vehiculo" type="pk-constr" factor="10" table="public.vehiculo">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="tramo">
+	<schema name="public"/>
+	<position x="161" y="215"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="id_ruta" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="correlativo" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="ciudad_origen" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="ciudad_destino" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="distancia" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="velocidad_promedio" not-null="true">
+		<type name="float"/>
+	</column>
+	<constraint name="pk_tramo" type="pk-constr" factor="10" table="public.tramo">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="viaje">
+	<schema name="public"/>
+	<position x="304" y="519"/>
+	<column name="id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="correlativo" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="id_vehiculo" not-null="true">
+		<type name="int2"/>
+	</column>
+	<column name="fecha_salida" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="hora_salida" not-null="true">
+		<type name="time" with-timezone="true"/>
+	</column>
+	<column name="id_tramo">
+		<type name="int2"/>
+	</column>
+	<column name="sentido" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<constraint name="pk_viaje" type="pk-constr" factor="10" table="public.viaje">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="fk_ruta_ciudad" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.ruta" table="public.ruta_ciudad">
+	<columns names="id_ruta" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_ciudad_ruta" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.ciudad" table="public.ruta_ciudad">
+	<columns names="id_ciudad" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_usuario_vehiculo" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.vehiculo">
+	<columns names="id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_tramo_ciudad_origen" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.ciudad" table="public.tramo">
+	<columns names="ciudad_origen" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_tramo_ciudad_destino" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.ciudad" table="public.tramo">
+	<columns names="ciudad_destino" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_tramo_ruta" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.ruta" table="public.tramo">
+	<columns names="id_ruta" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_viaje_tramo" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tramo" table="public.viaje">
+	<columns names="id_tramo" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<constraint name="fk_viaje_vehiculo" type="fk-constr"	 comparison-type="MATCH FULL"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.vehiculo" table="public.viaje">
+	<columns names="id_vehiculo" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+<relationship name="rel_tramo_ciudad" type="relfk"
+	 src-table="public.tramo"
+	 dst-table="public.ciudad"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_tramo_ruta" type="relfk"
+	 src-table="public.tramo"
+	 dst-table="public.ruta"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_ruta_ciudad_ruta" type="relfk"
+	 src-table="public.ruta_ciudad"
+	 dst-table="public.ruta"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_ruta_ciudad_ciudad" type="relfk"
+	 src-table="public.ruta_ciudad"
+	 dst-table="public.ciudad"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_vehiculo_usuario" type="relfk"
+	 src-table="public.vehiculo"
+	 dst-table="public.usuario"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_viaje_tramo" type="relfk"
+	 src-table="public.viaje"
+	 dst-table="public.tramo"
+	 src-required="true" dst-required="true"/>
+
+<relationship name="rel_viaje_vehiculo" type="relfk"
+	 src-table="public.viaje"
+	 dst-table="public.vehiculo"
+	 src-required="true" dst-required="true"/>
+
+</dbmodel>
